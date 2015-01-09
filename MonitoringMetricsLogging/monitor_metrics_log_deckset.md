@@ -1,3 +1,5 @@
+footer:
+slidenumbers: true
 
 # [fit] Monitoring
 # [fit] and Metrics
