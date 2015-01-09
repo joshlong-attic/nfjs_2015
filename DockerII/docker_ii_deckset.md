@@ -1,4 +1,4 @@
-footer:
+footer: © 2015 Matt Stine
 slidenumbers: true
 
 # Docker II
