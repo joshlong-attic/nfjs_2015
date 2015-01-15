@@ -3,11 +3,10 @@ package producer
 @Grab("org.springframework.cloud:spring-cloud-starter-feign:1.0.0.BUILD-SNAPSHOT")
 @Grab("org.springframework.cloud:spring-cloud-starter-eureka:1.0.0.BUILD-SNAPSHOT")
 
-import org.springframework.cloud.netflix.eureka.EurekaClient
 import org.springframework.cloud.netflix.feign.FeignClient
 import org.springframework.cloud.netflix.feign.FeignClientScan
 
-@EnableEurekaClient
+@EnableDiscoveryClient
 @FeignClientScan
 @RestController
 @Configuration
