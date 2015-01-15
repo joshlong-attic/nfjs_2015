@@ -455,6 +455,26 @@ public class ProducerResponse {
 
 ---
 
+# Consumer with Load Balancer
+
+```java
+@Autowired
+LoadBalancerClient loadBalancer
+
+@RequestMapping("/")
+String consume() {
+  ServiceInstance instance = loadBalancer.choose("producer")
+  URI producerUri = URI.create("http://${instance.host}:${instance.port}");
+
+  RestTemplate restTemplate = new RestTemplate()
+  ProducerResponse response = restTemplate.getForObject(producerUri, ProducerResponse.class)
+
+  "{\"value\": ${response.value}"
+}
+```
+
+---
+
 ![](https://raw.githubusercontent.com/spring-projects/spring-cloud/gh-pages/img/project-icon-large.png)
 # [fit] Fault
 # [fit] Tolerance
