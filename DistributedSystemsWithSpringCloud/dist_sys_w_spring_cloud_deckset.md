@@ -274,6 +274,22 @@ class ConfigServer {
 
 ---
 
+# Config Server `application.yml`
+
+```
+server:
+  port: 8888
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/mstine/config-repo.git
+```
+
+---
+
 ![](../Common/images/github.jpeg)
 
 # `https://github.com/mstine/config-repo/blob/master/demo.yml`
@@ -308,6 +324,16 @@ class Greeter {
   String greeting
 
 }
+```
+
+---
+
+# Config Client `bootstrap.yml`
+
+```
+spring:
+  application:
+    name: demo
 ```
 
 ---
