@@ -378,6 +378,72 @@ spring:
 
 ---
 
+# [fit] Producer
+# [fit] Consumer
+
+---
+
+# Eureka Service Registry
+
+```java
+@GrabExclude("ch.qos.logback:logback-classic")
+@EnableEurekaServer
+class Eureka {
+}
+```
+
+---
+
+# Producer
+
+```java
+@EnableDiscoveryClient
+@RestController
+public class Application {
+
+  int counter = 0
+
+  @RequestMapping("/")
+  String produce() {
+    "{\"value\": ${counter++}}"
+  }
+}
+```
+
+---
+
+# Consumer
+
+```java
+@EnableDiscoveryClient
+@RestController
+public class Application {
+
+  @Autowired
+  DiscoveryClient discoveryClient
+
+  @RequestMapping("/")
+  String consume() {
+    InstanceInfo instance = discoveryClient.getNextServerFromEureka("PRODUCER", false)
+
+    RestTemplate restTemplate = new RestTemplate()
+    ProducerResponse response = restTemplate.getForObject(instance.homePageUrl, ProducerResponse.class)
+
+    "{\"value\": ${response.value}"
+  }
+}
+
+public class ProducerResponse {
+  Integer value
+}
+```
+
+---
+
+# [fit] DEMO
+
+---
+
 ![](https://raw.githubusercontent.com/spring-projects/spring-cloud/gh-pages/img/project-icon-large.png)
 # [fit] Routing &
 # [fit] Load Balancing
