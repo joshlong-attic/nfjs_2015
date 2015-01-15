@@ -475,6 +475,75 @@ String consume() {
 
 ---
 
+# [fit] DEMO
+
+---
+
+# Consumer with Ribbon-enabled `RestTemplate`
+
+```java
+@Autowired
+RestTemplate restTemplate
+
+@RequestMapping("/")
+String consume() {
+  ProducerResponse response = restTemplate.getForObject("http://producer", ProducerResponse.class)
+
+  "{\"value\": ${response.value}"
+}
+```
+
+---
+
+# [fit] DEMO
+
+---
+
+# Feign Client
+
+```java
+@FeignClient("producer")
+public interface ProducerClient {
+
+  @RequestMapping(method = RequestMethod.GET, value = "/")
+  ProducerResponse getValue();
+}
+```
+
+---
+
+# Consumer with Feign Client
+
+```java
+@SpringBootApplication
+@FeignClientScan
+@EnableDiscoveryClient
+@RestController
+public class Application {
+
+  @Autowired
+  ProducerClient client;
+
+  @RequestMapping("/")
+  String consume() {
+    ProducerResponse response = client.getValue();
+
+    return "{\"value\": " + response.getValue() + "}";
+  }
+
+  public static void main(String[] args) {
+    SpringApplication.run(Application.class, args);
+  }
+}
+```
+
+---
+
+# [fit] Demo
+
+---
+
+
 ![](https://raw.githubusercontent.com/spring-projects/spring-cloud/gh-pages/img/project-icon-large.png)
 # [fit] Fault
 # [fit] Tolerance
