@@ -555,14 +555,97 @@ public class Application {
 
 ---
 
+# Circuit Breaker
+![inline](../Common/images/circuit-breaker.gif)
+
+---
+
+# Consumer `app.groovy`
+
+```java
+@EnableDiscoveryClient
+@EnableCircuitBreaker
+@RestController
+public class Application {
+
+  @Autowired
+  ProducerClient client
+
+  @RequestMapping("/")
+  String consume() {
+    ProducerResponse response = client.getProducerResponse()
+
+    "{\"value\": ${response.value}"
+  }
+
+}
+```
+
+---
+
+# Producer Client
+
+```java
+@Component
+public class ProducerClient {
+
+  @Autowired
+  RestTemplate restTemplate
+
+  @HystrixCommand(fallbackMethod = "getProducerFallback")
+  ProducerResponse getProducerResponse() {
+    restTemplate.getForObject("http://producer", ProducerResponse.class)
+  }
+
+  ProducerResponse getProducerFallback() {
+    new ProducerResponse(value: 42)
+  }
+}
+```
+
+---
+
+# [fit] Demo
+
+---
+
 ![](https://raw.githubusercontent.com/spring-projects/spring-cloud/gh-pages/img/project-icon-large.png)
 # [fit] Monitoring
+
+---
+
+# [fit] DEMO
+# [fit] `http://localhost:8082/hystrix.stream`
 
 ---
 
 # [fit] Hystrix
 # [fit] Dashboard
 ![](../Common/images/netflix_oss.jpeg)
+
+---
+
+# Hystrix Dashboard
+
+![inline](../Common/images/hystrix-dashboard.png)
+
+---
+
+# Hystrix Dashboard
+
+```java
+@Grab("org.springframework.cloud:spring-cloud-starter-hystrix-dashboard:1.0.0.RC1")
+
+import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard
+
+@EnableHystrixDashboard
+class HystrixDashboard {
+}
+```
+
+---
+
+# [fit] Demo
 
 ---
 
@@ -583,3 +666,4 @@ public class Application {
 
 * http://i.imgur.com/atz81.jpg
 * http://theroomermill.net/wp-content/uploads/2014/06/island-house.jpg
+* Circuit Breaker: Nygard, Michael. _Release It!_
